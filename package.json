@@ -1,0 +1,17 @@
+{
+  "name": "tic-tac-toe-cpp",
+  "version": "1.0.0",
+  "description": "A C++ Tic Tac Toe game",
+  "main": "main.cpp",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "node server.js",
+    "start": "concurrently \"npm run dev\" \"npm run serve\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
