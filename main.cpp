@@ -11,31 +11,19 @@
 
 using namespace std;
 
-// Global flags for exiting and returning to menu
+// Flags for game state
 bool exitFlag = false;
 bool returnToMenuFlag = false;
 
-// Global board
+// Game board
 unique_ptr<vector<string>> board = make_unique<vector<string>>(9);
 
-// Global variables for player and computer input
-int playerInput;
-int computerInput;
-
-// Global variable for current player
+// Game state variables
 string currentPlayer;
-
-// Global variable for computer opponent flag
-bool isComputerOpponent;
+bool isComputerOpponent = false;
 bool isBattleMode = false;
 
-// Global variables for archetypes
-/*
-Archetype Abilities:
-- Normal: Standard tic-tac-toe gameplay with no special abilities
-- Swarm: Can win by controlling all 4 corners of the board
-- Pyromancer: Can use a one-time special ability to clear all marks from the board
-*/
+// Archetype system
 enum class Archetype { None, Swarm, Pyromancer };
 Archetype player1Archetype = Archetype::None;
 Archetype player2Archetype = Archetype::None;
@@ -242,6 +230,7 @@ void playGame() {
 
     while (!exitFlag && !returnToMenuFlag) {
         bool validMove = false;
+        int playerInput;
 
         while (!validMove && !exitFlag && !returnToMenuFlag) {
             setColor(14);
@@ -257,11 +246,8 @@ void playGame() {
             }
             cout << endl;
 
-            if (currentPlayer == "X" || !isComputerOpponent) {
-                playerInput = getPlayerInput();
-            } else {
-                playerInput = getComputerInput();
-            }
+            playerInput = (currentPlayer == "X" || !isComputerOpponent) ? 
+                         getPlayerInput() : getComputerInput();
 
             if (playerInput == -1) {
                 break;
@@ -314,8 +300,6 @@ void playGame() {
 
 // Function to show the menu
 void showMenu() {
-    char choice;
-
     setColor(11);
     cout << "Select game mode:" << endl;
     cout << "1. Classic Tic-Tac-Toe" << endl;
@@ -388,10 +372,10 @@ void showMenu() {
             setColor(11);
             cout << "Do you want to play again? (y for yes, n for no, and m for menu, ESC to exit): ";
             setColor(7);
-            char playAgain;
+            
             while (true) {
                 if (_kbhit()) {
-                    playAgain = _getch();
+                    char playAgain = _getch();
                     if (playAgain == 'n' || playAgain == 'N') {
                         exitFlag = true;
                         break;

@@ -1,0 +1,4 @@
+
+g++ main.cpp -o main.exe && main.exe
+
+g++ test_tictactoe.cpp -o test_tictactoe.exe && test_tictactoe.exe
