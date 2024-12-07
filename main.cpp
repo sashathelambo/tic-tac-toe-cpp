@@ -29,6 +29,17 @@ Archetype player1Archetype = Archetype::None;
 Archetype player2Archetype = Archetype::None;
 bool pyromancerUsedSpecial = false;
 
+// Add these variables after the other game state variables
+struct GameStats {
+    int gamesPlayed = 0;
+    int player1Wins = 0;
+    int player2Wins = 0;
+    int ties = 0;
+} gameStats;
+
+// Add after other declarations, before the first function
+void displayGameReport();
+
 // Function to set console text color without using windows.h
 void setColor(int color) {
     switch (color) {
@@ -277,6 +288,12 @@ void playGame() {
             setColor(10);
             cout << "Player " << (currentPlayer == "X" ? "1 (X)" : "2 (O)") << " wins!" << endl;
             setColor(7);
+            gameStats.gamesPlayed++;
+            if (currentPlayer == "X") {
+                gameStats.player1Wins++;
+            } else {
+                gameStats.player2Wins++;
+            }
             break;
         }
 
@@ -284,6 +301,8 @@ void playGame() {
             setColor(14);
             cout << "It's a draw!" << endl;
             setColor(7);
+            gameStats.gamesPlayed++;
+            gameStats.ties++;
             break;
         }
 
@@ -296,6 +315,18 @@ void playGame() {
         setColor(7);
         _getch();
     }
+}
+
+// Add this function declaration before showMenu()
+void displayGameReport() {
+    setColor(11);
+    cout << "\n=== Game Session Report ===" << endl;
+    cout << "Total games played: " << gameStats.gamesPlayed << endl;
+    cout << "Player 1 (X) wins: " << gameStats.player1Wins << endl;
+    cout << "Player 2 (O) wins: " << gameStats.player2Wins << endl;
+    cout << "Ties: " << gameStats.ties << endl;
+    cout << "=========================" << endl;
+    setColor(7);
 }
 
 // Function to show the menu
@@ -369,6 +400,9 @@ void showMenu() {
         }
 
         if (!exitFlag && !returnToMenuFlag) {
+            // Display current game statistics
+            displayGameReport();
+            
             setColor(11);
             cout << "Do you want to play again? (y for yes, n for no, and m for menu, ESC to exit): ";
             setColor(7);
@@ -406,5 +440,7 @@ int main() {
         returnToMenuFlag = false;
         showMenu();
     }
+    // Display final game report before exiting
+    displayGameReport();
     return 0;
 }
